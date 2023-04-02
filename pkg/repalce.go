@@ -50,9 +50,14 @@ func Replace() {
 		cellMap := map[string]interface{}{}
 
 		for _, t := range templates {
+			// 是否匹配
 			find := false
+			// 匹配的值
 			matchCellValue := ""
+			// 需要替换的部分值
 			replaceCellValue := ""
+
+			// 缓存匹配到的单元格的值
 			var cellValues []interface{}
 
 			for _, n := range t["searchColumns"].([]string) {
@@ -85,9 +90,13 @@ func Replace() {
 			if find {
 				// 替换
 				for _, t := range t["targets"].([][]string) {
-					if err := f.SetCellValue(sheetName, fmt.Sprintf("%s%d", t[0], row), strings.ReplaceAll(matchCellValue, replaceCellValue, t[1])); err != nil {
+					newValue := strings.ReplaceAll(matchCellValue, replaceCellValue, t[1])
+					if err := f.SetCellValue(sheetName, fmt.Sprintf("%s%d", t[0], row), newValue); err != nil {
 						fmt.Printf("set cell value failed, err:%+v\n", err)
 					}
+
+					// update cellMap values
+					cellMap[t[0]] = newValue
 				}
 			}
 		}

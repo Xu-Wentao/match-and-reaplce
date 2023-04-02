@@ -82,6 +82,8 @@ func Match() {
 					if err := f.SetCellValue(sheetName, fmt.Sprintf("%s%d", t[0], row), t[1]); err != nil {
 						fmt.Printf("set cell value failed, err:%+v\n", err)
 					}
+					// update cellMap values
+					cellMap[t[0]] = t[1]
 				}
 			}
 		}
